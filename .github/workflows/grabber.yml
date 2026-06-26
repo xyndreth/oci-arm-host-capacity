@@ -21,20 +21,17 @@ jobs:
 
       - name: Create .env file
         run: |
-          cat > .env << EOF
-          OCI_REGION=${{ secrets.OCI_REGION }}
-          OCI_USER_ID=${{ secrets.OCI_USER_ID }}
-          OCI_TENANCY_ID=${{ secrets.OCI_TENANCY_ID }}
-          OCI_KEY_FINGERPRINT=${{ secrets.OCI_KEY_FINGERPRINT }}
-          OCI_PRIVATE_KEY_FILENAME=private_key.pem
-          OCI_SUBNET_ID=${{ secrets.OCI_SUBNET_ID }}
-          OCI_IMAGE_ID=${{ secrets.OCI_IMAGE_ID }}
-          OCI_SSH_PUBLIC_KEY=${{ secrets.OCI_SSH_PUBLIC_KEY }}
-          OCI_AVAILABILITY_DOMAIN=${{ secrets.OCI_AVAILABILITY_DOMAIN }}
-          OCI_SHAPE=${{ secrets.OCI_SHAPE }}
-          OCI_OCPUS=${{ secrets.OCI_OCPUS }}
-          OCI_MEMORY_IN_GBS=${{ secrets.OCI_MEMORY_IN_GBS }}
-          EOF
+          echo "OCI_REGION=${{ secrets.OCI_REGION }}" > .env
+          echo "OCI_USER_ID=${{ secrets.OCI_USER_ID }}" >> .env
+          echo "OCI_TENANCY_ID=${{ secrets.OCI_TENANCY_ID }}" >> .env
+          echo "OCI_KEY_FINGERPRINT=${{ secrets.OCI_KEY_FINGERPRINT }}" >> .env
+          echo "OCI_PRIVATE_KEY_FILENAME=private_key.pem" >> .env
+          echo "OCI_SUBNET_ID=${{ secrets.OCI_SUBNET_ID }}" >> .env
+          echo "OCI_IMAGE_ID=${{ secrets.OCI_IMAGE_ID }}" >> .env
+          echo "OCI_AVAILABILITY_DOMAIN=${{ secrets.OCI_AVAILABILITY_DOMAIN }}" >> .env
+          echo "OCI_SHAPE=${{ secrets.OCI_SHAPE }}" >> .env
+          echo "OCI_OCPUS=${{ secrets.OCI_OCPUS }}" >> .env
+          echo "OCI_MEMORY_IN_GBS=${{ secrets.OCI_MEMORY_IN_GBS }}" >> .env
 
       - name: Create private key file
         run: |
@@ -43,3 +40,7 @@ jobs:
 
       - name: Run grabber
         run: php index.php
+
+      - name: Notify on success
+        if: success()
+        run: echo "🎉 INSTANCE CREATED SUCCESSFULLY!"
