@@ -28,6 +28,7 @@ jobs:
           echo "OCI_PRIVATE_KEY_FILENAME=private_key.pem" >> .env
           echo "OCI_SUBNET_ID=${{ secrets.OCI_SUBNET_ID }}" >> .env
           echo "OCI_IMAGE_ID=${{ secrets.OCI_IMAGE_ID }}" >> .env
+          echo 'OCI_SSH_PUBLIC_KEY=${{ secrets.OCI_SSH_PUBLIC_KEY }}' >> .env
           echo "OCI_AVAILABILITY_DOMAIN=${{ secrets.OCI_AVAILABILITY_DOMAIN }}" >> .env
           echo "OCI_SHAPE=${{ secrets.OCI_SHAPE }}" >> .env
           echo "OCI_OCPUS=${{ secrets.OCI_OCPUS }}" >> .env
