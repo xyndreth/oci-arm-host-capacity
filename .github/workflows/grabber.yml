@@ -1,0 +1,45 @@
+name: OCI Instance Grabber
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  grab:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install dependencies
+        run: composer install --no-dev --prefer-dist
+
+      - name: Create .env file
+        run: |
+          cat > .env << EOF
+          OCI_REGION=${{ secrets.OCI_REGION }}
+          OCI_USER_ID=${{ secrets.OCI_USER_ID }}
+          OCI_TENANCY_ID=${{ secrets.OCI_TENANCY_ID }}
+          OCI_KEY_FINGERPRINT=${{ secrets.OCI_KEY_FINGERPRINT }}
+          OCI_PRIVATE_KEY_FILENAME=private_key.pem
+          OCI_SUBNET_ID=${{ secrets.OCI_SUBNET_ID }}
+          OCI_IMAGE_ID=${{ secrets.OCI_IMAGE_ID }}
+          OCI_SSH_PUBLIC_KEY=${{ secrets.OCI_SSH_PUBLIC_KEY }}
+          OCI_AVAILABILITY_DOMAIN=${{ secrets.OCI_AVAILABILITY_DOMAIN }}
+          OCI_SHAPE=${{ secrets.OCI_SHAPE }}
+          OCI_OCPUS=${{ secrets.OCI_OCPUS }}
+          OCI_MEMORY_IN_GBS=${{ secrets.OCI_MEMORY_IN_GBS }}
+          EOF
+
+      - name: Create private key file
+        run: |
+          echo "${{ secrets.OCI_PRIVATE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+
+      - name: Run grabber
+        run: php index.php
